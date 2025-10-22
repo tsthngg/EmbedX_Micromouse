@@ -1,7 +1,7 @@
 #include "irSensor.h"
 #include <Arduino.h>
 
-int irSensor::getObs() {  //Kiểm tra chướng ngại vật
+int irSensor::checkObs() {  //Kiểm tra chướng ngại vật
     if (digitalRead(pin) == HIGH) {
         return 1;
     }
@@ -20,30 +20,27 @@ irSensor irUpperRight;
 irSensor irLowerRight;
 
 int wallFront() {
-    if (irFrontLeft.getObs() || irFrontRight.getObs()) {
+    if (irFrontLeft.checkObs() || irFrontRight.checkObs()) {
         return 1;
     }
     return 0;
 }
 
 int wallLeft() {
-    if (irUpperLeft.getObs() || irLowerLeft.getObs()) {
+    if (irUpperLeft.checkObs() || irLowerLeft.checkObs()) {
         return 1;
     }
     return 0;
 }
 
 int wallRight() {
-    if (irUpperRight.getObs() || irLowerRight.getObs()) {
+    if (irUpperRight.checkObs() || irLowerRight.checkObs()) {
         return 1;
     }
     return 0;
 }
 
 void setup() {
-
 }
-
-void loop() {
-    
+void loop() {  
 }

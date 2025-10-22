@@ -4,8 +4,8 @@
 
 class irSensor{
     public:
-        const int pin;
-        int getObs();
+        int pin;
+        int checkObs();
         void setPin(int pin);
 };
 
