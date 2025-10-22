@@ -8,5 +8,8 @@ class irSensor{
         int getObs();
         void setPin(int pin);
 };
+int wallFront();
+int wallLeft();
+int wallRight();
 
 #endif
