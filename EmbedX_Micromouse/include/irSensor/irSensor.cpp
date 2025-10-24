@@ -14,8 +14,8 @@ int irSensor::checkObs() {  //Kiểm tra chướng ngại vật
 }
 
 irSensor irFrontLeft(36);
-irSensor irFrontRight(37);
-irSensor irUpperLeft(38);
+irSensor irFrontRight(38);
+irSensor irUpperLeft(42);
 irSensor irLowerLeft(39);
 irSensor irUpperRight(40);
 irSensor irLowerRight(41);
