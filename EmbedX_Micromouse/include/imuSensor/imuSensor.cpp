@@ -2,7 +2,7 @@
 #include <Arduino.h>
 
 // Khởi tạo đối tượng MPU6050
-MPU mpu;
+MPU6050 mpu(Wire);
 
 // Góc nghiêng ban đầu
 float angleX = 0.0f;
@@ -46,7 +46,7 @@ float movingAverage(float* buffer, float newValue) {
 void setupIMU() {
   Wire.begin(21, 22);         // Khởi tạo I2C với chân SDA/SCL tùy ESP32
   mpu.initialize();           // Khởi tạo MPU6050
-  mpu.CalibrateGyro();        // Hiệu chỉnh lệch gyro
+  mpu.calcGyroOffsets();    // Hiệu chỉnh lệch gyro
 
   if (!mpu.testConnection()) {
     while (1);                // Nếu không kết nối được thì dừng chương trình

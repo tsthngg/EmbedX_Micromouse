@@ -5,7 +5,7 @@
 #include <MPU6050_light.h> // Thư viện MPU6050 bạn đang dùng
 
 // Đối tượng cảm biến
-MPU mpu;
+extern MPU6050 mpu;
 
 // Góc nghiêng các trục
 extern float angleX;
