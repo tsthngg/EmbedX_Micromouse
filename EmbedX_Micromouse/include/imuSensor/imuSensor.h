@@ -2,10 +2,10 @@
 #define IMU_H
 
 #include <Wire.h>
-#include "MPU6050_light.h"  // Thư viện MPU6050 bạn đang dùng
+#include <MPU6050_light.h> // Thư viện MPU6050 bạn đang dùng
 
 // Đối tượng cảm biến
-extern MPU mpu;
+MPU mpu;
 
 // Góc nghiêng các trục
 extern float angleX;
@@ -36,9 +36,9 @@ extern int accIndex;
 extern int currentMotionState;
 
 // Khai báo các hàm
-float movingAverage(float* buffer, float newValue);
-void setupIMU();
-void updateIMU();
+extern float movingAverage(float* buffer, float newValue);
+extern void setupIMU();
+extern void updateIMU();
 
 #endif
 
