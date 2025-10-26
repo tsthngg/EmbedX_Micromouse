@@ -1,16 +1,7 @@
 #include "irSensor.h"
 #include <Arduino.h>
 
-class irSensor{
-    public:
-        irSensor(int pin);
-        int checkObs();
-    private:
-        int pin;
-};
-
-irSensor::irSensor(int pin) {
-    this->pin = pin;
+irSensor::irSensor(int pin) : pin(pin) {
     pinMode(pin, INPUT);
 }
 
