@@ -9,8 +9,7 @@ class irSensor{
         int pin;
 };
 
-irSensor::irSensor(int pin) {
-    this->pin = pin;
+irSensor::irSensor(int pin) : pin(pin) {
     pinMode(pin, INPUT);
 }
 
