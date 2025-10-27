@@ -21,7 +21,7 @@ extern const int motorDir2_R;
 //extern double ti_le_banh_rang = 1.0;
 //extern double khoang_cach_2_banh = 0.10; // mét (chưa có thông số chính xác)
 // Các hàm điều khiển động cơ sẽ được gọi ở thuật toán 
-void setupMotorcontrol();
+void setupMotor_control();
 void re_trai(int toc_do);
 void re_phai(int toc_do);
 void di_thang(int toc_do);
