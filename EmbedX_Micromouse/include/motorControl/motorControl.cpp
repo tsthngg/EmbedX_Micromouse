@@ -1,8 +1,10 @@
-#include "Motor_control.h"
+#include "motorControl.h"
+#include <Arduino.h>
+
 // Định nghĩa chân động cơ
 // Khai báo chân encoder (tiến độ hiện tại chưa dùng tới)
-const int encoderTraiPin = 34;
-const int encoderPhaiPin = 35;
+const int leftEncoder = 34;
+const int rightEncoder = 35;
 
 // Chân động cơ trái
 const int motorPWM_L = 25;
@@ -14,7 +16,7 @@ const int motorPWM_R = 14;
 const int motorDir1_R = 12;
 const int motorDir2_R = 13;
 
-void setupMotor_control() {
+void motorSetup() {
   pinMode(motorPWM_L, OUTPUT);
   pinMode(motorDir1_L, OUTPUT);
   pinMode(motorDir2_L, OUTPUT);
@@ -30,37 +32,37 @@ void setupMotor_control() {
   ledcAttachPin(motorPWM_R, 1);
 }
 
-void di_thang(int toc_do) {
+void forward(int speed) {
   digitalWrite(motorDir1_L, HIGH);
   digitalWrite(motorDir2_L, LOW);
-  ledcWrite(0, toc_do);
+  ledcWrite(0, speed);
 
   digitalWrite(motorDir1_R, HIGH);
   digitalWrite(motorDir2_R, LOW);
-  ledcWrite(1, toc_do);
+  ledcWrite(1, speed);
 }
 
-void re_trai(int toc_do) {
+void turnLeft(int speed) {
   digitalWrite(motorDir1_L, LOW);
   digitalWrite(motorDir2_L, HIGH);
-  ledcWrite(0, toc_do);
+  ledcWrite(0, speed);
 
   digitalWrite(motorDir1_R, HIGH);
   digitalWrite(motorDir2_R, LOW);
-  ledcWrite(1, toc_do);
+  ledcWrite(1, speed);
 }
 
-void re_phai(int toc_do) {
+void turnRight(int speed) {
   digitalWrite(motorDir1_L, HIGH);
   digitalWrite(motorDir2_L, LOW);
-  ledcWrite(0, toc_do);
+  ledcWrite(0, speed);
 
   digitalWrite(motorDir1_R, LOW);
   digitalWrite(motorDir2_R, HIGH);
-  ledcWrite(1, toc_do);
+  ledcWrite(1, speed);
 }
 
-void dung_lai() {
+void stop() {
   ledcWrite(0, 0);
   ledcWrite(1, 0);
 }

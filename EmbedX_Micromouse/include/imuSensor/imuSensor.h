@@ -1,5 +1,5 @@
-#ifndef IMU_H
-#define IMU_H
+#ifndef IMUSENSOR_H
+#define IMUSENSOR_H
 
 #include <MPU6050_light.h>
 #include <Wire.h>
