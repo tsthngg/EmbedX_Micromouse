@@ -1,18 +1,38 @@
-#include <Arduino.h>
+#include "Motor_control.h"
+#include "BluetoothSerial.h"
 
-// put function declarations here:
-int myFunction(int, int);
+BluetoothSerial SerialBT;
+  void setup(){
+    SerialBT.begin("Motolcontrol");
+    setupMotor_control();
+    }
 
-void setup() {
-  // put your setup code here, to run once:
-  int result = myFunction(2, 3);
-}
+  void handleCommand(char currentstate){
+    switch (currentstate){
+      case 'F' : di_thang() ; break;
 
-void loop() {
-  // put your main code here, to run repeatedly:
-}
+      case 'L' : re_phai() ; break;
 
-// put function definitions here:
-int myFunction(int x, int y) {
-  return x + y;
-}
+      case 'R' : re_trai() ; break;
+
+      case 'S'  :dung_lai(); break;
+
+      case 'B'  :quay_dau(); break;
+
+    }
+  }
+  void loop(){
+
+   // di_thang();
+   // quay_dau();
+   //re_trai();
+   //di_thang();
+   //quay_dau();
+   //di_thang();
+
+    if (SerialBT.available()){
+      char currentstate = SerialBT.read();
+      handleCommand(currentstate);
+    }
+ 
+  }
