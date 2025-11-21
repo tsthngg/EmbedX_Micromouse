@@ -1,4 +1,4 @@
-#define PID_H
+#ifndef PID_H
 #define PID_H
 
 #include <algorithm>
@@ -19,4 +19,5 @@ public:
 };
 
 #endif
+
 
