@@ -24,16 +24,16 @@ const int motorDir1_R = 12;
 const int motorDir2_R = 13;
 
 // Khai báo thông số động cơ và tính toán xung di chuyển 
-float diameter = 0.043;//mét
-float distance = 0.18; // khoảng cách cần di chuyển để đi từ ô này sang ô kia là 0.18 mét
-float road_turn = 0.08639379797; // khoảng cách mỗi bánh phải đi để rẽ đủ 90 độ (số liệu đo đạc thực nghiệm)
-float PWM_1cycle = 1060; // số xung xuất ra khi bánh quay đủ 1 vòng (số liệu tương đối từ đo đạc thực nghiệm)
+float duong_kinh_banh_xe = 0.043;//mét
+float kc = 0.18; // khoảng cách cần di chuyển để đi từ ô này sang ô kia là 0.18 mét
+float re_trai_phai = 0.08639379797; // khoảng cách mỗi bánh phải đi để rẽ đủ 90 độ (số liệu đo đạc thực nghiệm)
+float so_xung_1_vong_banh_xe = 1060; // số xung xuất ra khi bánh quay đủ 1 vòng (số liệu tương đối từ đo đạc thực nghiệm)
 
-float cycles_1square = distance / (PI * diameter); // số vòng bánh xe để xe tiến được 1 ô
-float cycles_turn = road_turn / (PI * diameter); // số vòng bánh xe để xe rẽ được 90 độ
+float so_vong_di_thang = kc/(PI*duong_kinh_banh_xe); // số vòng bánh xe để xe tiến được 1 ô
+float so_vong_re_trai_phai = re_trai_phai/(PI*duong_kinh_banh_xe); // số vòng bánh xe để xe rẽ được 90 độ
 
-float PWM_straight = cycles_1square * PWM_1cycle; // số xung cần truyền cho encoder biết thời điểm dừng khi đủ khoảng cách mong muốn
-float PWM_turn = cycles_turn * PWM_1cycle; // xung cần truyền cho encoder biết thời điểm rẽ đủ 90 độ
+float xung_can_di_thang = (so_vong_di_thang*so_xung_1_vong_banh_xe); // số xung cần truyền cho encoder biết thời điểm dừng khi đủ khoảng cách mong muốn
+float xung_can_re_trai_phai = so_vong_re_trai_phai*   so_xung_1_vong_banh_xe; // xung cần truyền cho encoder biết thời điểm rẽ đủ 90 độ
 
 // PID 
 float Kp = 0.2;
@@ -44,21 +44,6 @@ int last_time = 0;
 float last_error = 0;
 int encoderValuecr = 0;
 float e_tich_luy = 0;
-
-float PID_function (int setpoint){
-      int current_time = millis();
-      int cycle_time = (current_time - last_time);
-      last_time = current_time;
-      float error = setpoint - encoderValuecr;
-
-      float v_error = (error - last_error)/cycle_time;
-
-      e_tich_luy += error*cycle_time; 
-      float u = Kp*error + Ki*v_error + Kd*e_tich_luy;
-
-      int pwm = (int)fabs(u);
-      return pwm;
-}
 
 void encoder1_isr(){
       int A = digitalRead(encoder1_A);
@@ -112,24 +97,33 @@ void setupMotor_control() {
 // muốn rẽ trái bánh 1 quay thuận bánh 2 quay thuận
 // muốn rẽ phải bánh 1 quay ngược bánh 2 quay ngược
 
-void goStraight () {
+void di_thang () {
 
       encoder1Value = 0; // reset giá trị encoder 1 sau mỗi lần gọi hàm
       encoder2Value = 0; // reset giá trị encoder 2 sau mỗi lần gọi hàm
 
       digitalWrite(motorDir1_L, LOW);
       digitalWrite(motorDir2_L, HIGH);
-      ledcWrite(0,PID_function(1060));
+      ledcWrite(0,180);
 
       digitalWrite(motorDir1_R, HIGH);
       digitalWrite(motorDir2_R, LOW);
-      ledcWrite(1,PID_function(1060));
+      ledcWrite(1,180);
 
       ledcWrite(1,0);// lệnh dừng 1 sau khi số xung đạt tiêu chuẩn
       ledcWrite(0,0);// lệnh dừng 2 sau khi số xung đạt chuẩn
+       while((encoder1Value < (long)xung_can_re_trai_phai)){
+            Serial.println(encoder1Value);
+            ledcWrite(0,0);
+      }
+      while((encoder2Value < (long)(0 - xung_can_re_trai_phai))){
+            Serial.println(encoder2Value);
+            ledcWrite(1,0);
+      }
+      
 }
 
-void turnLeft() {
+void re_trai() {
       encoder1Value = 0;
       encoder2Value = 0;
 
@@ -141,21 +135,20 @@ void turnLeft() {
       digitalWrite(motorDir2_R, HIGH);
       ledcWrite(1,180);
 
-      while((encoder1Value < (long)PWM_turn)){
+      while((encoder1Value < (long)xung_can_re_trai_phai)){
             Serial.println(encoder1Value);
             ledcWrite(0,0);
       }
-      while((encoder2Value < (long)(0 - PWM_turn))){
+      while((encoder2Value < (long)(0 - xung_can_re_trai_phai))){
             Serial.println(encoder2Value);
             ledcWrite(1,0);
       }
       
 }  
 
-void turnRight() {
+void re_phai() {
       encoder1Value = 0;
       encoder2Value = 0;
-      
       digitalWrite(motorDir1_L, HIGH);
       digitalWrite(motorDir2_L, LOW);
       ledcWrite(0,180);
@@ -163,24 +156,23 @@ void turnRight() {
       digitalWrite(motorDir1_R, HIGH);
       digitalWrite(motorDir2_R, LOW);
       ledcWrite(1,180);
-      
-      while((encoder1Value > (long)(0 - PWM_turn))){
+      while((encoder1Value > (long)(0-xung_can_re_trai_phai))){
             Serial.println(encoder1Value);
             ledcWrite(0,0);
       }
-      while((encoder2Value > (long)(PWM_turn))){
+      while((encoder2Value > (long)(xung_can_re_trai_phai))){
             Serial.println(encoder2Value);
             ledcWrite(1,0);
       }  
       
 }
  
-void stop() {
+void dung_lai() {
   ledcWrite(0, 0);
   ledcWrite(1, 0);
 }
 
-void turnBack(){
+void quay_dau(){
       encoder1Value = 0;
       encoder2Value = 0;
   
@@ -191,12 +183,11 @@ void turnBack(){
       digitalWrite(motorDir1_R, HIGH);
       digitalWrite(motorDir2_R, LOW);
       ledcWrite(1,180);
-      
-      while((encoder1Value == 2*(0 - PWM_turn))){
+      while((encoder1Value == 2*(0-xung_can_re_trai_phai))){
             Serial.println(encoder1Value);
             ledcWrite(0,0);
       }
-      while((encoder2Value == 2 * PWM_turn)){
+      while((encoder2Value == 2*xung_can_re_trai_phai)){
             Serial.println(encoder2Value);
             ledcWrite(1,0);
       }
