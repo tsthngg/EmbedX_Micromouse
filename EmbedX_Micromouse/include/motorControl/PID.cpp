@@ -1,26 +1,30 @@
 #include "PID.h"
 
-PID::PID(float p, float i, float d, float deltaTime, float maxI, float minI, float maxOut){
-    Kp = p ; Ki = i; Kd =  d ; dt = deltaTime ;  maxIntegral = maxI ;maxIntegral = -minI;  maxOutput = maxOut ;
- }
-
+PID::PID (float p, float i, float d, float deltaTime, long long maxI, long long minI, long long maxOut, long long minOut)
+    : Kp(p), Ki(i), Kd(d), dt(deltaTime), maxIntegral(maxI), minIntegral(minI), minOutput(minOut), maxOutput(maxOut) {}
+ 
 // Tính toán giá trị PID
-float PID::tinhtoan(float setpoint, float measured) {        //measured là giá trị đo được trong thực tế, setpoint là giá trị mong muốn
-    float error = setpoint - measured;                     
-    float newIntegral = integral + error * dt;            // Integral là tích phân, để cộng dồn sai số theo thời gian để giảm thiểu sai số về lâu dài 
-    newIntegral = clamp(newIntegral, minIntegral, maxIntegral);    // Tránh cộng dồn tích phân quá lớn so với sai số mà motor bù được
+float PID::tinhtoan(long long setpoint, long long measured){        
+    
+    long long error = setpoint - measured;    //measured là giá trị đo được trong thực tế, setpoint là giá trị mong muốn 
+
+    float newIntegral = integral + error * dt;       // Integral là tích phân, để cộng dồn sai số theo thời gian để giảm thiểu sai số về lâu dài 
+
+    newIntegral = limit(newIntegral, minIntegral, maxIntegral);    // Tránh cộng dồn tích phân quá lớn so với sai số mà motor bù được
 
     float derivative = (error - prevError) / dt;            //derivative là đạo hàm, tính sự thay đổi sai số theo thời gian
 
     float output = Kp * error + Ki * newIntegral + Kd * derivative;    
-    output = clamp(output, -maxOutput, maxOutput);     
-    // Chỉ cập nhật output trong tầm motor bù được
 
-    if (output != maxOutput && output != -maxOutput) {
+    output = limit(output, minOutput, maxOutput);   
+
+// Chỉ cập nhật output trong tầm motor bù được
+
+    if (output != maxOutput && output != -maxOutput){
         integral = newIntegral;
     }
+    prevError = error; //prevError là sai số của lần tính trước   
 
-    prevError = error; //prevError là sai số của lần tính trước               
     return output;                                       
 }
 
@@ -30,11 +34,8 @@ void PID::reset() {
     prevError = 0;
 }
 
-// Thay đổi dt (thời gian giữa các vòng lặp)
-void PID::setDt(float newDt) {
-    dt = newDt;
-}
-long long clamp (long long newIntegral, const long long minIntegral, const long long maxIntegral){
-newIntegral = (newIntegral > maxIntegral) ? maxIntegral : (newIntegral < minIntegral) ? minIntegral : newIntegral;
-return newIntegral; 
+//Hàm giới hạn đầu ra
+long long limit (long long currentPwm, const long long minPwm, const long long maxPwm){
+    currentPwm = (currentPwm > maxPwm) ? maxPwm : (currentPwm < minPwm) ? minPwm : currentPwm;
+    return currentPwm; 
 }
