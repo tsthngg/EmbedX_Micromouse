@@ -91,24 +91,26 @@ void setupMotor_control() {
 void goStraight () {        
     encoder1Value = 0; // reset giá trị encoder 1 sau mỗi lần gọi hàm
     encoder2Value = 0; // reset giá trị encoder 2 sau mỗi lần gọi hàm
-
-    long long currentTime = millis();
-    long long prevtime = 0;
-    long long dt = currentTime - prevtime;
-    prevtime = currentTime;
-    
     PID pidLeft(0,0,0,dt,255,-255,255,-255);
     PID pidRight(0,0,0,dt,255,-255,255,-255);
 
     digitalWrite(motorDir1_L, LOW);
     digitalWrite(motorDir2_L, HIGH);
-    ledcWrite(0,pidLeft.tinhtoan(1060, encoder1Value));
-    pidLeft.reset();
-
+    ledcWrite(0,254);
+      
     digitalWrite(motorDir1_R, HIGH);
     digitalWrite(motorDir2_R, LOW);
-    ledcWrite(1,pidRight.tinhtoan(1060, encoder2Value));
-    pidRight.reset();
+    ledcWrite(1,255);
+      
+    while((encoder1Value < (long)PWM_straight)){
+        Serial.println(encoder1Value);
+        ledcWrite(0,0);
+    }
+    while((encoder2Value < (long)(0 - PWM_straight))){
+        Serial.println(encoder2Value);
+        ledcWrite(1,0);
+    }
+   
 
 }
 
