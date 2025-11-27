@@ -1,7 +1,6 @@
 #ifndef Motor_control  
 #define Motor_control
-#include <Arduino.h>
-#include <PID_v1.h>
+#include<Adruino.h>
 // Khai báo chân encoder
 extern const int encoder_1A;
 extern const int encoder_1B;
