@@ -1,23 +1,22 @@
 #ifndef PID_H
 #define PID_H
-
-#include <algorithm>
-
 class PID {
 public:
     float Kp, Ki, Kd;
     float integral = 0;
     float prevError = 0;
     float dt;
-    float maxIntegral;
-    float minIntegral;
-    float maxOutput;
-    long long clamp(long long newIntegral, const long long minIntergral, const long long maxIntergral);
-    PID(float p, float i, float d, float  deltaTime, float maxI, float minI, float maxOut);
-    float tinhtoan(float setpoint, float measured);
+    long long maxIntegral;
+    long long minIntegral;
+    long long maxOutput;
+    long long minOutput;
+    PID(float p, float i, float d, float  deltaTime, long long  maxI, long long minI, long long maxOut, long long minOut);
+    float tinhtoan(long long setpoint, long long measured);
     void reset();
     void setDt(float newDt);
 };
 
-#endif
+//Hàm giới hạn đầu ra 
+long long limit (long long currentPwm, const long long minPwm, const long long maxPwm);
 
+#endif
