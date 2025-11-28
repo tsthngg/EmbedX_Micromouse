@@ -11,9 +11,8 @@ public:
     long long maxOutput;
     long long minOutput;
     PID(float p, float i, float d, float  deltaTime, long long  maxI, long long minI, long long maxOut, long long minOut);
-    float tinhtoan(long long setpoint, long long measured);
+    float caculate(long long setpoint, long long measured);
     void reset();
-    void setDt(float newDt);
 };
 
 //Hàm giới hạn đầu ra 

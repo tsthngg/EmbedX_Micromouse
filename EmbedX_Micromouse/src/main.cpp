@@ -1,27 +1,20 @@
-#include "Motor_control.h"
 #include <Arduino.h>
+#include "mouseController/Maze.h"
+#include "mouseController/Robot.h"
 
+Maze maze;
+Robot robot(0, 0, 0);
 
-  void setup(){
-    setupMotor_control();
-    Serial.begin(9600);
-    }
+bool visited[SIZE][SIZE];
+int prevFlood[SIZE][SIZE];
+int curFlood[SIZE][SIZE];
 
-  void loop(){
-    goStraight(1060,1060);
-    delay(2000);
-    turnLeft(550,550);
-    delay(2000);
-    turnRight(550,550);
-    delay(2000);
-    Serial.print("Gia tri encoder 1 la :"); Serial.println(encoder1Value);
-    Serial.print("Gia tri encoder 2 la :"); Serial.println(encoder2Value);
+void setup(){
+  memset(visited, 0, sizeof(visited));
+  visited[0][0] = true;
+}
 
+void loop(){
 
-   // di_thang();
-   // quay_dau();
-   //re_trai();
-   //di_thang();
-   //quay_dau();
-   //di_thang();
-  }
+ 
+}

@@ -10,15 +10,15 @@ class irSensor{
         int pin;
 };
 
-extern irSensor irFrontLeft(36);
-extern irSensor irFrontRight(38);
-extern irSensor irUpperLeft(42);
-extern irSensor irLowerLeft(39);
-extern irSensor irUpperRight(40);
-extern irSensor irLowerRight(41);
+irSensor irFrontLeft(36);
+irSensor irFrontRight(38);
+irSensor irUpperLeft(42);
+irSensor irLowerLeft(39);
+irSensor irUpperRight(40);
+irSensor irLowerRight(41);
 
-extern int wallFront();
-extern int wallLeft();
-extern int wallRight();
+int wallFront();
+int wallLeft();
+int wallRight();
 
 #endif

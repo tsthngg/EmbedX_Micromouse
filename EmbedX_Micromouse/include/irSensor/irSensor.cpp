@@ -12,13 +12,6 @@ int irSensor::checkObs() {  //Kiểm tra chướng ngại vật
     return 0;
 }
 
-irSensor irFrontLeft(36);
-irSensor irFrontRight(38);
-irSensor irUpperLeft(42);
-irSensor irLowerLeft(39);
-irSensor irUpperRight(40);
-irSensor irLowerRight(41);
-
 int wallFront() {
     if (irFrontLeft.checkObs() || irFrontRight.checkObs()) {
         return 1;
@@ -38,9 +31,4 @@ int wallRight() {
         return 1;
     }
     return 0;
-}
-
-void setup() {
-}
-void loop() {  
 }

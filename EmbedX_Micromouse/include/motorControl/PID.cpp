@@ -4,7 +4,7 @@ PID::PID (float p, float i, float d, float deltaTime, long long maxI, long long 
     : Kp(p), Ki(i), Kd(d), dt(deltaTime), maxIntegral(maxI), minIntegral(minI), minOutput(minOut), maxOutput(maxOut) {}
  
 // Tính toán giá trị PID
-float PID::tinhtoan(long long setpoint, long long measured){        
+float PID::caculate(long long setpoint, long long measured){        
     
     long long error = setpoint - measured;    //measured là giá trị đo được trong thực tế, setpoint là giá trị mong muốn 
 

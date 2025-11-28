@@ -1,6 +1,6 @@
 #ifndef Motor_control  
 #define Motor_control
-#include<Adruino.h>
+
 // Khai báo chân encoder
 extern const int encoder_1A;
 extern const int encoder_1B;
@@ -40,7 +40,7 @@ extern float PWM_turn; // xung cần truyền cho encoder biết thời điểm 
 void setupMotor_control();
 void turnLeft();
 void turnRight();
-void goStraight();
+void moveForward();
 void turnBack();
 void stop ();
 #endif
