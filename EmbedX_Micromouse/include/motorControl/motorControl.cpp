@@ -63,11 +63,10 @@ void setupMotor_control() {
 
   pinMode(encoder2_A, INPUT_PULLUP);
   pinMode(encoder2_B, INPUT_PULLUP);
-
+      
   attachInterrupt(digitalPinToInterrupt(encoder1_A), encoder1_isr, CHANGE);
   attachInterrupt(digitalPinToInterrupt(encoder2_A), encoder2_isr, CHANGE);
-
-
+      
   pinMode(motorPWM_L, OUTPUT);
   pinMode(motorDir1_L, OUTPUT);
   pinMode(motorDir2_L, OUTPUT);
@@ -90,7 +89,7 @@ void setupMotor_control() {
     PID pidLeft(0,0,0,0,255,-255,255,-255);
     PID pidRight(0,0,0,0,255,-255,255,-255);
 void goStraight (long long setpointLeft,long long setpointRight) {       
-    
+      
     encoder1Value = 0; // reset giá trị encoder 1 sau mỗi lần gọi hàm
     encoder2Value = 0; // reset giá trị encoder 2 sau mỗi lần gọi hàm  
     long long prevTime = 0;
@@ -100,7 +99,6 @@ void goStraight (long long setpointLeft,long long setpointRight) {
         pidLeft.dt = currentTime - prevTime;
         pidRight.dt = currentTime - prevTime;
         prevTime = currentTime;
-
         int pwmLeft = pidLeft.tinhtoan(setpointLeft, encoder1Value);
         int pwmRight = pidRight.tinhtoan(setpointRight, encoder2Value);
         
@@ -124,7 +122,7 @@ void goStraight (long long setpointLeft,long long setpointRight) {
             digitalWrite(motorDir2_R, HIGH);
             ledcWrite(1, -pwmRight);
         }
-         static long lastPrint = 0;
+        static long lastPrint = 0;
         if (currentTime - lastPrint > 5) {
             Serial.print("Encoder1: "); Serial.println(encoder1Value);
             Serial.print("Encoder2: "); Serial.println(encoder2Value);
@@ -137,11 +135,9 @@ void goStraight (long long setpointLeft,long long setpointRight) {
     encoder2Value = 0;
     pidLeft.reset();
     pidRight.reset();
-    
 }
 void turnLeft(long long setpointLeft, long long setpointRight){
-
- 
+      
     encoder1Value = 0; // reset giá trị encoder 1 sau mỗi lần gọi hàm
     encoder2Value = 0; // reset giá trị encoder 2 sau mỗi lần gọi hàm  
     long long prevTime = 0;
@@ -151,7 +147,7 @@ void turnLeft(long long setpointLeft, long long setpointRight){
         pidLeft.dt = currentTime - prevTime;
         pidRight.dt = currentTime - prevTime;
         prevTime = currentTime;
-
+          
         int pwmLeft = pidLeft.tinhtoan(setpointLeft, encoder1Value);
         int pwmRight = pidRight.tinhtoan(setpointRight, encoder2Value);
         
@@ -175,7 +171,7 @@ void turnLeft(long long setpointLeft, long long setpointRight){
             digitalWrite(motorDir2_R, LOW);
             ledcWrite(1, -pwmRight);
         }
-         static long lastPrint = 0;
+        static long lastPrint = 0;
         if (currentTime - lastPrint > 5) {
             Serial.print("Encoder1: "); Serial.println(encoder1Value);
             Serial.print("Encoder2: "); Serial.println(encoder2Value);
@@ -188,7 +184,6 @@ void turnLeft(long long setpointLeft, long long setpointRight){
     encoder2Value = 0;
     pidLeft.reset();
     pidRight.reset();
-    
     }
 
 void turnRight(long long setpointLeft, long long setpointRight) {
@@ -247,13 +242,12 @@ void stop() {
   ledcWrite(0, 0);
   ledcWrite(1, 0);
 }
-
 void turnBack(long long setpointLeft, long long setpointRight){
      
     encoder1Value = 0; // reset giá trị encoder 1 sau mỗi lần gọi hàm
     encoder2Value = 0; // reset giá trị encoder 2 sau mỗi lần gọi hàm  
     long long prevTime = 0;
-
+      
     while (((abs(encoder1Value)) <= setpointLeft) && ((abs(encoder2Value)) <= setpointRight)){
         long long currentTime = millis();
         pidLeft.dt = currentTime - prevTime;
