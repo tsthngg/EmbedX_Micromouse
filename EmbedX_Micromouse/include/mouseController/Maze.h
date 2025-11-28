@@ -6,7 +6,7 @@
 
 class Maze{ 
 private:
-    int flood[SIZE][SIZE];
+    
 public:
     Maze();
     Walls walls;
