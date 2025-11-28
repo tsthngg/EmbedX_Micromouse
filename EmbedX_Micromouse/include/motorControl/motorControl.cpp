@@ -99,7 +99,7 @@ void moveForward () {
     encoder2Value = 0; // reset giá trị encoder 2 sau mỗi lần gọi hàm  
     long long prevTime = 0;
 
-    setPointLR = 2060;
+    setPointLR = PWM_straight;
     
     while (((abs(encoder1Value)) <= setPointLR) && ((abs(encoder2Value)) <= setPointLR)){
         long long currentTime = millis();
@@ -150,7 +150,7 @@ void turnLeft(){
     encoder2Value = 0; // reset giá trị encoder 2 sau mỗi lần gọi hàm  
     long long prevTime = 0;
 
-    setPointLR = 550;
+    setPointLR = PWM_turn;
 
     while (((abs(encoder1Value)) <= setPointLR) && ((abs(encoder2Value)) <= setPointLR)){
         long long currentTime = millis();
@@ -202,7 +202,7 @@ void turnRight() {
     encoder2Value = 0; // reset giá trị encoder 2 sau mỗi lần gọi hàm  
     long long prevTime = 0;
 
-    setPointLR = 550;
+    setPointLR = PWM_turn;
 
     while (((abs(encoder1Value)) <= setPointLR) && ((abs(encoder2Value)) <= setPointLR)){
         long long currentTime = millis();
@@ -260,7 +260,7 @@ void turnBack(){
     encoder2Value = 0; // reset giá trị encoder 2 sau mỗi lần gọi hàm  
     long long prevTime = 0;
     
-    setPointLR = 1300;
+    setPointLR = PWM_turn*2;
 
     while (((abs(encoder1Value)) <= setPointLR) && ((abs(encoder2Value)) <= setPointLR)){
         long long currentTime = millis();
