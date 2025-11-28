@@ -1,27 +1,22 @@
 #include "Motor_control.h"
-#include "BluetoothSerial.h"
+#include <Arduino.h>
 
-BluetoothSerial SerialBT;
+
   void setup(){
-    SerialBT.begin("Motolcontrol");
     setupMotor_control();
+    Serial.begin(9600);
     }
 
-  void handleCommand(char currentstate){
-    switch (currentstate){
-      case 'F' : di_thang() ; break;
-
-      case 'L' : re_phai() ; break;
-
-      case 'R' : re_trai() ; break;
-
-      case 'S'  :dung_lai(); break;
-
-      case 'B'  :quay_dau(); break;
-
-    }
-  }
   void loop(){
+    goStraight(1060,1060);
+    delay(2000);
+    turnLeft(550,550);
+    delay(2000);
+    turnRight(550,550);
+    delay(2000);
+    Serial.print("Gia tri encoder 1 la :"); Serial.println(encoder1Value);
+    Serial.print("Gia tri encoder 2 la :"); Serial.println(encoder2Value);
+
 
    // di_thang();
    // quay_dau();
@@ -29,10 +24,4 @@ BluetoothSerial SerialBT;
    //di_thang();
    //quay_dau();
    //di_thang();
-
-    if (SerialBT.available()){
-      char currentstate = SerialBT.read();
-      handleCommand(currentstate);
-    }
- 
   }
