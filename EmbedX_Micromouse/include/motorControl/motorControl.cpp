@@ -67,11 +67,10 @@ void setupMotor_control() {
 
   pinMode(encoder2_A, INPUT_PULLUP);
   pinMode(encoder2_B, INPUT_PULLUP);
-
+      
   attachInterrupt(digitalPinToInterrupt(encoder1_A), encoder1_isr, CHANGE);
   attachInterrupt(digitalPinToInterrupt(encoder2_A), encoder2_isr, CHANGE);
-
-
+      
   pinMode(motorPWM_L, OUTPUT);
   pinMode(motorDir1_L, OUTPUT);
   pinMode(motorDir2_L, OUTPUT);
@@ -131,7 +130,7 @@ void moveForward () {
             digitalWrite(motorDir2_R, HIGH);
             ledcWrite(1, -pwmRight);
         }
-         static long lastPrint = 0;
+        static long lastPrint = 0;
         if (currentTime - lastPrint > 5) {
             Serial.print("Encoder1: "); Serial.println(encoder1Value);
             Serial.print("Encoder2: "); Serial.println(encoder2Value);
@@ -144,7 +143,6 @@ void moveForward () {
     encoder2Value = 0;
     pidLeft.reset();
     pidRight.reset();
-    
 }
 void turnLeft(){
 
@@ -196,7 +194,6 @@ void turnLeft(){
     encoder2Value = 0;
     pidLeft.reset();
     pidRight.reset();
-    
     }
 
 void turnRight() {
