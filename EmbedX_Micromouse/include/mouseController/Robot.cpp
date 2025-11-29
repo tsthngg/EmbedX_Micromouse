@@ -36,6 +36,9 @@ bool Robot::moveAlongPath(Maze& maze, const Path& path, bool visited[SIZE][SIZE]
         auto cell = path[idx];
         int tx = cell.first; 
         int ty = cell.second;
+        if (exploredFlag && isCenter(x, y)) {
+            return true;
+        }
         // kiểm tra xem (tx, ty) và (rx, ry) có cạnh nhau không
         if (std::abs(tx - this->x) + std::abs(ty - this->y) != 1) { 
             return false;

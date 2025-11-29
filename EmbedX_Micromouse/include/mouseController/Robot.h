@@ -9,6 +9,7 @@ private:
     int x; 
     int y; 
     int dir;
+    bool exploredFlag = false;
     void rotateTo(int targetDir);
 public:
     Robot(int startX = 0, int startY = 0, int startDir = 0);
@@ -23,6 +24,12 @@ public:
     }
     int getDir()  { 
         return dir; 
+    }
+    bool getExploredFlag() {
+        return exploredFlag;
+    }
+    void setExploredFlag(bool mode) {
+        exploredFlag = mode;
     }
 };
 #endif
