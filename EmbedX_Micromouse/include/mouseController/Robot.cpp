@@ -114,3 +114,34 @@ void Robot::exploreFullMap(Maze& maze, bool visited[SIZE][SIZE]) {
         }
     }
 }
+bool Robot::hasWall(Maze& maze) {
+    auto it = maze.walls.find({x, y});
+    if (it == maze.walls.end()) return false;
+    return it->second.count(dir);
+}
+int Robot::getBestDirectionToGoal(Maze& maze, int floodOut[SIZE][SIZE]) {
+    int bestDir = -1;
+    for (int d = 0; d < 4; d++) {
+        int nx = x + dx[d];
+        int ny = y + dy[d];
+        if(inRange(nx, ny) && !hasWall(maze)) {
+            if (floodOut[nx][ny] == (floodOut[x][y] - 1)) {
+                bestDir = d;
+                return bestDir;
+            }
+        }
+
+    }
+    return bestDir;
+}
+void Robot:: floodfillToGoal(Maze& maze, int floodOut[SIZE][SIZE]) {
+    while(!isCenter(x,y)) {
+        int nextDir = getBestDirectionToGoal(maze, floodOut);
+        if(nextDir != -1) {
+            rotateTo(nextDir);
+            moveForward();
+            x += dx[dir];
+            y += dy[dir];
+        }
+    }
+}
