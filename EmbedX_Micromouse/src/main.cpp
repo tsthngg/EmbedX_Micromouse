@@ -6,9 +6,6 @@
   void setup(){
     setupMotor_control();
     Serial.begin(9600);
-    encoder1Value = 0; // reset giá trị encoder 1 sau mỗi lần gọi hàm
-    encoder2Value = 0; // reset giá trị encoder 2 sau mỗi lần gọi hàm  
-
       }
     PID pidLeft(1.2,0.05,0.8,0,255,-255,255,-255);
     PID pidRight(1.2,0.05,0.8,0,255,-255,255,-255);
