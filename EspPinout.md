@@ -1,13 +1,13 @@
 # List of components
 
-## 2 Encoders w/ motors
+## Encoders w/ motors
 - Encoder 1 (left): 3 pin & 2 power pins
     |Pin|GPIO|Note|
     |:--|:-:|:-:|
     |VCC|5V|Highest posible|
     |GND|GND|Connect w/ others|
-    |M1|G26||
-    |M2|G27||
+    |M1|OUTA|Driver's GPIO|
+    |M2|OUTB|Driver's GPIO|
     |C1|G34||
     |C2|G35||
 
@@ -16,18 +16,25 @@
     |:--|:-:|:-:|
     |VCC|5V|Highest posible|
     |GND|GND|Connect w/ others|
-    |M1|G12||
-    |M2|G13||
+    |M1|OUTC|Driver's GPIO|
+    |M2|OUTD|Driver's GPIO|
     |C1|G32||
     |C2|G33||
 
-## 1 L238V3
+## Motor Driver L298V3
 |Pin|GPIO|Note|
 |:--|:-:|:-:|
 |ENA|G18||
 |ENB|G19||
+|INA|G26|OUTA Connected|
+|INB|G27|OUTB Connected|
+|INC|G12|OUTC Connected|
+|IND|G13|OUTD Connected|
+|VDD|Battery's (+)||
+|GND|Battery's (-) & GND||
+|+5V|5V||
 
-## 1 MPU6050
+## MPU6050
 |Pin|GPIO|Note|
 |:--|:-:|:-:|
 |VCC|3V3|Connect w/ others|
@@ -36,7 +43,7 @@
 |SDA|G21|Can't be change|
 |INT|G14||
 
-## 6 IR Sensors
+## IR Sensors
 - IR Front Left: 1 pin & 2 power pins
     |Pin|GPIO|Note|
     |:--|:-:|:-:|
@@ -54,7 +61,7 @@
     |:--|:-:|:-:|
     |VCC|3V3|Connect w/ others|
     |GND|GND|Connect w/ others|
-    |OUT|G39|GPIO SM|
+    |OUT|G39|GPIO SN|
 - IR Lower Left: 1 pin & 2 power pins
     |Pin|GPIO|Note|
     |:--|:-:|:-:|
@@ -66,10 +73,13 @@
     |:--|:-:|:-:|
     |VCC|3V3|Connect w/ others|
     |GND|GND|Connect w/ others|
-    |OUT|G5||
+    |OUT|G17||
 - IR Lower Right: 1 pin & 2 power pins
     |Pin|GPIO|Note|
     |:--|:-:|:-:|
     |VCC|3V3|Connect w/ others|
     |GND|GND|Connect w/ others|
-    |OUT|G4||
+    |OUT|G16||
+
+## Micromouse Interface
+![Micromouse Interface](images/Micromouse_Interface.png)
