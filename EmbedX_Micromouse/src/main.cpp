@@ -1,109 +1,80 @@
 #include "Motor_control.h"
 #include <Arduino.h>
-#include "PID.h"
+#include "BluetoothSerial.h"
+BluetoothSerial SerialBT;
 
-
-  void setup(){
+void setup(){
     setupMotor_control();
     Serial.begin(9600);
+    SerialBT.begin("Motorcontrol");
       }
-    PID pidLeft(1.2,0.05,0.8,0,255,-255,255,-255);
-    PID pidRight(1.2,0.05,0.8,0,255,-255,255,-255);
-    long long setpoint;
-    long long measuredLeft;
-    long long measuredRight;
-    long long prevTime = 0;
-    long long errorL;
-    long long errorR;
-    float newIntegralL;
-    float newIntegralR;
-    float derivativeL;
-    float derivativelR;
-    float outputLeft;
-    float outputRight;
 
-  void loop(){ 
-    setpoint = 9600;
-    long long currentTime = millis();
-    pidLeft.dt = (currentTime - prevTime)/1000;
-    pidRight.dt = (currentTime - prevTime)/1000;
-    prevTime = currentTime;
+long long time_m = micros();
+long long prevTime = 0;
+long long setpoint;
+int dirL = 1;
+int dirR = 1;
 
-    measuredLeft = encoder1Value;
-
-    errorL = setpoint - measuredLeft; //measured là giá trị đo được trong thực tế, setpoint là giá trị mong muốn 
-
-    newIntegralL = pidLeft.integral + errorL *pidLeft.dt;       // Integral là tích phân, để cộng dồn sai số theo thời gian để giảm thiểu sai số về lâu dài 
-
-    newIntegralL = limit(newIntegralL, -255, 255);    // Tránh cộng dồn tích phân quá lớn so với sai số mà motor bù được
-
-    derivativeL= (errorL - pidLeft.prevError) / pidLeft.dt;            //derivative là đạo hàm, tính sự thay đổi sai số theo thời gian
-
-    outputLeft = pidLeft.Kp * errorL + pidLeft.Ki * newIntegralL + pidLeft.Kd * derivativeL;    
-
-    outputLeft = limit(outputLeft, -255 , 255);   
-
-// Chỉ cập nhật output trong tầm motor bù được
-
-    if (outputLeft != pidLeft.maxOutput && outputLeft != -pidLeft.maxOutput){
-        pidLeft.integral = newIntegralL;
-    }
-    pidLeft.prevError = errorL; //prevError là sai số của lần tính trước   
-
-    measuredRight = encoder2Value;
-
-    errorR = setpoint - measuredRight; //measured là giá trị đo được trong thực tế, setpoint là giá trị mong muốn 
-
-    newIntegralR = pidRight.integral + errorR *pidRight.dt;       // Integral là tích phân, để cộng dồn sai số theo thời gian để giảm thiểu sai số về lâu dài 
-
-    newIntegralR = limit(newIntegralR, -255, 255);    // Tránh cộng dồn tích phân quá lớn so với sai số mà motor bù được
-
-    derivativelR = (errorR - pidRight.prevError) / pidRight.dt;            //derivative là đạo hàm, tính sự thay đổi sai số theo thời gian
-
-    outputRight = pidRight.Kp * errorR + pidRight.Ki * newIntegralR + pidRight.Kd * derivativelR;    
-
-    outputRight = limit(outputRight, -255 , 255);   
-
-// Chỉ cập nhật output trong tầm motor bù được
-
-    if (outputRight != pidRight.maxOutput && outputRight != -pidRight.maxOutput){
-        pidRight.integral = newIntegralR;
-    }
-    pidRight.prevError = errorR; //prevError là sai số của lần tính trước   
-            if(outputLeft >= 0){
-            digitalWrite(motorDir1_L, LOW);
-            digitalWrite(motorDir2_L, HIGH);
-            ledcWrite(0,outputLeft);
+void handleCommand(char currentState){
+      switch (currentState){
+        case 'F': {
+          setpoint = goStraight(setpoint);
+          dirL = 1;
+          dirR = 1;
         }
-        else {
-            digitalWrite(motorDir1_L,HIGH);
-            digitalWrite(motorDir2_L,LOW);
-            ledcWrite(0,-outputLeft);
+          break;
+        case 'L': {
+          setpoint = turnLeft(setpoint);
+          dirL = 0;
+          dirR = 1;
         }
-        if(outputRight >= 0){
-            digitalWrite(motorDir1_R,HIGH);
-            digitalWrite(motorDir2_R, LOW);
-            ledcWrite(1, outputRight);
+          break;
+        case 'R': {
+          setpoint = turnRight(setpoint);
+          dirL = 1;
+          dirR = 0;
         }
-        else{
-            digitalWrite(motorDir1_R, LOW);
-            digitalWrite(motorDir2_R, HIGH);
-            ledcWrite(1, -outputRight);
-          }
-
-      if(((abs(encoder1Value - setpoint) < 500)) && ((abs(encoder2Value - setpoint) < 500 ))){ 
-        pidLeft.reset();
-        pidRight.reset();
-        prevTime = 0;
-        encoder1Value = 0;
-        encoder2Value = 0;
-        ledcWrite(0,0);
-        ledcWrite(1,0);
-        delay(3000);
+          break;
+        case 'B' : turnBack();
+          setpoint = turnBack();
+          dirL = 1;
+          dirR = 0;
       }
+    }
+    
+          long long PWM_r = 0;
+          long long PWM_l = 0;
+          
+
+void loop(){ 
+      if(SerialBT.available()){
+        char currentState = SerialBT.read();
+        handleCommand(currentState);
+      }
+
+      if(setpoint != 0){
+
+          unsigned long currentTime = micros();
+          long long dt = currentTime - prevTime;
       
-  
-  Serial.print("Encoder 1 value : "); Serial.println(encoder1Value); 
-  Serial.print("Encoder 2 Value : "); Serial.println(encoder2Value);
-}
+         PWM_r = Motor_controlLeft(setpoint, encoder1Value, dt);
+         PWM_l = Motor_controlRight(setpoint, encoder2Value, dt);
+
+          motor_control(PWM_r, PWM_l, dirL, dirR); // Gọi hàm điều khiển động cơ
+          if((PWM_r < 50) || (PWM_l <50)){
+            ledcWrite(0,0);
+            ledcWrite(1,0);
+            delay(800);
+              PWM_r = 0;
+              PWM_l = 0;
+              encoder1Value = 0;
+              encoder2Value = 0;
+              setpoint = 0;
+          }
+      }
+          Serial.print("Encoder 1 value : "); Serial.println(encoder1Value); 
+          Serial.print("Encoder 2 Value : "); Serial.println(encoder2Value);
+    }
+
+
  
