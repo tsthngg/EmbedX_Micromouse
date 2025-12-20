@@ -1,6 +1,5 @@
 #ifndef Motor_control  
 #define Motor_control
-
 // Khai báo chân encoder
 extern const int encoder_1A;
 extern const int encoder_1B;
@@ -38,9 +37,17 @@ extern float PWM_turn; // xung cần truyền cho encoder biết thời điểm 
 
 // Các hàm điều khiển động cơ sẽ được gọi ở thuật toán 
 void setupMotor_control();
-void turnLeft();
-void turnRight();
-void moveForward();
-void turnBack();
+void motor_control(float outputLeft , float outputRight, int dirL, int dirR);
+long long turnLeft(long long setpoint);
+long long turnRight(long long setpoint);
+long long goStraight(long long setpoint);
+long long turnBack();
 void stop ();
+float Motor_controlLeft(long long setpoint, long long encoder1Value, long long dt);
+float Motor_controlRight(long long setpoint, long long encoder2Value, long long dt);
+class PID {
+public:
+    float Kp, Ki, Kd;
+    PID(float p, float i, float d);
+};
 #endif
