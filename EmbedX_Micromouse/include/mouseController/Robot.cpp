@@ -134,7 +134,7 @@ int Robot::getBestDirectionToGoal(Maze& maze, int floodOut[SIZE][SIZE]) {
     }
     return bestDir;
 }
-void Robot:: floodfillToGoal(Maze& maze, int floodOut[SIZE][SIZE]) {
+void Robot::floodfillToGoal(Maze& maze, int floodOut[SIZE][SIZE]) {
     while(!isCenter(x,y)) {
         int nextDir = getBestDirectionToGoal(maze, floodOut);
         if(nextDir != -1) {
@@ -145,3 +145,30 @@ void Robot:: floodfillToGoal(Maze& maze, int floodOut[SIZE][SIZE]) {
         }
     }
 }
+std::vector<int> Robot::getPathToGoal (Maze& maze, int floodOut[SIZE][SIZE]) {
+    std::vector<int> path;
+    int sx = 0;
+    int sy = 0;
+    while (!isCenter(sx, sy)) {
+        int dir = getBestDirectionToGoal(maze, floodOut);
+        path.push_back(dir);
+        sx+= dx[dir];
+        sy+= dy[dir];
+    }
+    return path;
+}
+
+void Robot::backToStart(std::vector<int> path) {
+    for (int i = path.size() - 1; i >=0; i--) {
+        int direction = path[i] ^2;
+        rotateTo(direction);
+        moveForward();
+    }
+}
+void Robot::goToGoal(std::vector<int> path) {
+    for (int i = 0; i < path.size(); i++) {
+        rotateTo(path[i]);
+        moveForward();
+    }
+}
+

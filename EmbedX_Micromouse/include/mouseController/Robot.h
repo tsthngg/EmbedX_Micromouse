@@ -19,6 +19,9 @@ public:
     bool hasWall(Maze& maze); // kiếm tra có tường phía trước hay không
     int getBestDirectionToGoal(Maze& maze, int floodOut[SIZE][SIZE]); // tìm hướng có ô có trọng số nhỏ hơn ô hiện tại 1 đơn vị 
     void floodfillToGoal(Maze& maze, int floodOut[SIZE][SIZE]); // di chuyên từ ô hiện tại tới đích
+    std::vector<int> getPathToGoal (Maze& maze, int floodOut[SIZE][SIZE]); // trả về 1 path chứa các hướng cần quay để tới đích
+    void backToStart(std::vector<int> path); // di chuyển về đích sau khi kết thúc lượt 1
+    void goToGoal(std::vector<int> path); // di chuyển đến ô đicsh
     int getX()  { 
         return x; 
     }
