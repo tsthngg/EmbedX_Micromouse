@@ -43,7 +43,24 @@ void loop() {
             continue;
         }
         if (!visited[nx][ny]) {
-            
+            if ( mod(newdir - robot.getDir()) == 1) {
+                nextdir = 'r';
+                rotated = true;
+            }
+            else if (mod(newdir - robot.getDir()) == 2) {
+                nextdir = 'b';
+                rotated = true;
+            }
+            else if (mod(newdir - robot.getDir()) == 3) {
+                nextdir = 'l';
+                rotated = true;
+            }
+            else {
+                nextdir = 'f';
+                rotated = false;
+            }
+            break;
+        
         }
       }
     }
