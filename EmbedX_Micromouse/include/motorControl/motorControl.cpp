@@ -95,7 +95,7 @@ void setupMotor_control() {
 // muốn rẽ trái bánh 1 quay thuận bánh 2 quay thuận
 // muốn rẽ phải bánh 1 quay ngược bánh 2 quay ngượ
 
-long long goStraight (long long setpoint) {       
+long long moveForward (long long setpoint) {       
       setpoint = PWM_straight;
       return setpoint;
 }
