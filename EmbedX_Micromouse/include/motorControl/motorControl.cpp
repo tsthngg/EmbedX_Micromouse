@@ -1,4 +1,4 @@
-#include "Motor_control.h"
+#include "motorControl.h"
 #include <Arduino.h>
 #include<string.h>
 // Định nghĩa chân động cơ
@@ -14,12 +14,10 @@ volatile int encoder1Value = 0;
 volatile int encoder2Value = 0;
 
 // Chân động cơ trái
-const int motorPWM_L = 18;
 const int motorDir1_L = 26;   
 const int motorDir2_L = 27;  
 
 // Chân động cơ phải
-const int motorPWM_R = 19;
 const int motorDir1_R = 12;
 const int motorDir2_R = 13;
 
@@ -66,43 +64,46 @@ void encoder2_isr(){
 }
 // Cấu hình chân 
 void setupMotor_control() {
-  pinMode(encoder1_A, INPUT_PULLUP);
-  pinMode(encoder1_B, INPUT_PULLUP);
+      pinMode(encoder1_A, INPUT_PULLUP);
+      pinMode(encoder1_B, INPUT_PULLUP);
 
-  pinMode(encoder2_A, INPUT_PULLUP);
-  pinMode(encoder2_B, INPUT_PULLUP);
+      pinMode(encoder2_A, INPUT_PULLUP);
+      pinMode(encoder2_B, INPUT_PULLUP);
 
-  attachInterrupt(digitalPinToInterrupt(encoder1_A), encoder1_isr, CHANGE);
-  attachInterrupt(digitalPinToInterrupt(encoder2_A), encoder2_isr, CHANGE);
+      attachInterrupt(digitalPinToInterrupt(encoder1_A), encoder1_isr, CHANGE);
+      attachInterrupt(digitalPinToInterrupt(encoder2_A), encoder2_isr, CHANGE);
 
+      pinMode(motorDir1_L, OUTPUT);
+      pinMode(motorDir2_L, OUTPUT);
+      ledcSetup(0, 5000, 8);
+      ledcSetup(1, 5000, 8);
+      ledcAttachPin(motorDir1_L, 0);
+      ledcAttachPin(motorDir2_L, 1);
 
-  pinMode(motorPWM_L, OUTPUT);
-  pinMode(motorDir1_L, OUTPUT);
-  pinMode(motorDir2_L, OUTPUT);
-
-  pinMode(motorPWM_R, OUTPUT);
-  pinMode(motorDir1_R, OUTPUT);
-  pinMode(motorDir2_R, OUTPUT);
-
-  ledcSetup(0, 5000, 8);
-  ledcAttachPin(motorPWM_L, 0);
-
-  ledcSetup(1, 5000, 8);
-  ledcAttachPin(motorPWM_R, 1);
+      pinMode(motorDir1_R, OUTPUT);
+      pinMode(motorDir2_R, OUTPUT);
+      ledcSetup(2, 5000, 8);
+      ledcSetup(3, 5000, 8);
+      ledcAttachPin(motorDir1_R, 2);
+      ledcAttachPin(motorDir2_R, 3);
 }
 // cùng chiều kim đồng hồ encoder1 nhận giá trị dương encoder2 nhận giá trị âm
 // muốn tiến bánh 1 quay thuận bánh 2 quay ngược
 // muốn rẽ trái bánh 1 quay thuận bánh 2 quay thuận
 // muốn rẽ phải bánh 1 quay ngược bánh 2 quay ngượ
 
-long long moveForward (long long setpoint) {       
+// long long moveForward(long long setpoint) {       
+//       setpoint = PWM_straight;
+//       return setpoint;
+// }
+long long moveForward(long long setpoint){ 
       setpoint = PWM_straight;
       return setpoint;
-}
+} 
 long long turnLeft(long long setpoint){
       setpoint = PWM_turn;
       return setpoint;
-    }
+}
 
 long long turnRight(long long setpoint) {
       setpoint = PWM_turn;
@@ -112,6 +113,8 @@ long long turnRight(long long setpoint) {
 void stop() {
   ledcWrite(0, 0);
   ledcWrite(1, 0);
+  ledcWrite(2, 0);
+  ledcWrite(3, 0);
 }
 
 long long turnBack(){
@@ -119,30 +122,24 @@ long long turnBack(){
       return setpoint;
 }
 void motor_control(float outputLeft , float outputRight, int dirL, int dirR){
-      if(dirL == 1){
-           
-            digitalWrite(motorDir1_L, LOW);
-            digitalWrite(motorDir2_L, HIGH);
-            ledcWrite(0,outputLeft);
+      if(dirL == 1){        
+            ledcWrite(0, 0);
+            ledcWrite(1, outputLeft);
       }
       
       if(dirL == 0){
-      
-            digitalWrite(motorDir1_L, HIGH);
-            digitalWrite(motorDir2_L, LOW);
-            ledcWrite(0,outputLeft);
+            ledcWrite(0, outputLeft);
+            ledcWrite(1, 0);
       }           
 
       if(dirR == 1){
-            digitalWrite(motorDir1_R,HIGH);
-            digitalWrite(motorDir2_R, LOW);
-            ledcWrite(1, outputRight);
+            ledcWrite(2, outputRight);
+            ledcWrite(3, 0);
    
       }
       if(dirR == 0){          
-            digitalWrite(motorDir1_R,LOW);
-            digitalWrite(motorDir2_R, HIGH);
-            ledcWrite(1, outputRight);            
+            ledcWrite(2, 0);
+            ledcWrite(3, outputRight);        
       }
 
 
@@ -196,5 +193,3 @@ float Motor_controlRight (long long setpoint, long long encoder2Value, long long
       
       return outputRight;
 }
-
-

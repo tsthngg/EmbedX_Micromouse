@@ -13,12 +13,10 @@ extern volatile int encoder1Value;
 extern volatile int encoder2Value;
 
 // Chân động cơ trái
-extern const int motorPWM_L;
 extern const int motorDir1_L;
 extern const int motorDir2_L;
 
 // Chân động cơ phải
-extern const int motorPWM_R;
 extern const int motorDir1_R;
 extern const int motorDir2_R;
 // Thông số cơ học
@@ -40,7 +38,7 @@ void setupMotor_control();
 void motor_control(float outputLeft , float outputRight, int dirL, int dirR);
 long long turnLeft(long long setpoint);
 long long turnRight(long long setpoint);
-long long goStraight(long long setpoint);
+long long moveForward(long long setpoint);
 long long turnBack();
 void stop ();
 float Motor_controlLeft(long long setpoint, long long encoder1Value, long long dt);

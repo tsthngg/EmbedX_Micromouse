@@ -3,19 +3,20 @@
 Robot::Robot(int startX, int startY, int startDir) : x(startX), y(startY), dir(startDir) {
     
 }
+long long setpoint;
 void Robot::rotateTo(int targetDir) {
     int diff = (targetDir - dir + 4) % 4; // độ lệch góc giữa góc quay muốn tới và góc hiện tại
     if (diff == 1) { 
-        turnRight(); 
+        turnRight(setpoint); 
         dir = mod(dir + 1); 
     }
-    else if (diff == 2) { 
-        turnRight(); 
-        turnRight(); 
+    else if (diff == 2) {
+        turnRight(setpoint);
+        turnRight(setpoint); 
         dir = mod(dir + 2); 
     }
     else if (diff == 3) { 
-        turnLeft(); 
+        turnLeft(setpoint); 
         dir = mod(dir + 3); 
     }
 }
@@ -24,7 +25,7 @@ bool Robot::stepForwardAndSense(Maze& maze, bool visited[SIZE][SIZE]) {
         maze.addWall(x, y, dir);
         return false;
     }
-    moveForward();
+    moveForward(setpoint);
     x += dx[dir];
     y += dy[dir];
     visited[x][y] = true;
@@ -72,7 +73,7 @@ bool Robot::moveAlongPath(Maze& maze, const Path& path, bool visited[SIZE][SIZE]
     return true; 
 }
 void Robot::exploreFullMap(Maze& maze, bool visited[SIZE][SIZE]) {
-    maze.senseWallsAndUpdate(x, y, dir);
+    maze.senseWallsAndUpdate(x, y, dir); // update tường xung quanh
     while (true) {
         bool moved = false;
         int order[4] = {-1, 0, 1, 2}; // ưu tiên: left, straight, right, back
@@ -139,7 +140,7 @@ void Robot::floodfillToGoal(Maze& maze, int floodOut[SIZE][SIZE]) {
         int nextDir = getBestDirectionToGoal(maze, floodOut);
         if(nextDir != -1) {
             rotateTo(nextDir);
-            moveForward();
+            moveForward(setpoint);
             x += dx[dir];
             y += dy[dir];
         }
@@ -162,13 +163,13 @@ void Robot::backToStart(std::vector<int> path) {
     for (int i = path.size() - 1; i >=0; i--) {
         int direction = path[i] ^2;
         rotateTo(direction);
-        moveForward();
+        moveForward(setpoint);
     }
 }
 void Robot::goToGoal(std::vector<int> path) {
     for (int i = 0; i < path.size(); i++) {
         rotateTo(path[i]);
-        moveForward();
+        moveForward(setpoint);
     }
 }
 
