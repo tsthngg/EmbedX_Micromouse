@@ -1,4 +1,4 @@
-#include "Robot.h"
+#include "mouseController/Robot.h"
 
 Robot::Robot(int startX, int startY, int startDir) : x(startX), y(startY), dir(startDir) {
     
@@ -21,7 +21,7 @@ void Robot::rotateTo(int targetDir) {
     }
 }
 bool Robot::stepForwardAndSense(Maze& maze, bool visited[SIZE][SIZE]) {
-    if (wallFront()) {
+    if (checkWall('f')) {
         maze.addWall(x, y, dir);
         return false;
     }

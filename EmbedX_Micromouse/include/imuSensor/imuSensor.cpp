@@ -1,4 +1,4 @@
-#include "imuSensor.h"
+#include "imuSensor/imuSensor.h"
 #include <Arduino.h>
 
 // Khởi tạo đối tượng MPU6050

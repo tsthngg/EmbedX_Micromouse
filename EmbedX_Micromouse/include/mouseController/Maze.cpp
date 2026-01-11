@@ -19,9 +19,9 @@ void Maze::addWall(int x, int y, int dir) {
     }
 }
 void Maze::senseWallsAndUpdate(int x, int y, int dir) {
-    if (wallFront())  addWall(x, y, dir);
-    if (wallLeft())   addWall(x, y, mod(dir - 1));
-    if (wallRight())  addWall(x, y, mod(dir + 1));
+    if (checkWall('f'))  addWall(x, y, dir);
+    if (checkWall('l'))   addWall(x, y, mod(dir - 1));
+    if (checkWall('r'))  addWall(x, y, mod(dir + 1));
 }
 void Maze::floodFill(int floodOut[SIZE][SIZE]) {
     std::queue<Cell> q;

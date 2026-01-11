@@ -2,23 +2,13 @@
 
 #define IRSENSOR_H
 
-class irSensor{
-    public:
-        irSensor(int pin);
-        int checkObs();
-    private:
-        int pin;
-};
+const int irFrontLeftPin = 36;
+const int irFrontRightPin = 34;
+const int irUpperLeftPin = 39;
+const int irUpperRightPin = 35;
+const int irLowerLeftPin = 14;
+const int irLowerRightPin = 15;
 
-irSensor irFrontLeft(36);
-irSensor irFrontRight(38);
-irSensor irUpperLeft(42);
-irSensor irLowerLeft(39);
-irSensor irUpperRight(40);
-irSensor irLowerRight(41);
-
-int wallFront();
-int wallLeft();
-int wallRight();
+bool checkWall(char side);
 
 #endif

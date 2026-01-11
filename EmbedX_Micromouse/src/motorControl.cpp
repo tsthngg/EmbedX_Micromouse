@@ -1,4 +1,4 @@
-#include "motorControl.h"
+#include "motorControl/motorControl.h"
 #include <Arduino.h>
 #include<string.h>
 // Định nghĩa chân động cơ
@@ -33,10 +33,8 @@ float cycles_turn = road_turn / (PI * diameter); // số vòng bánh xe để xe
 float PWM_straight = cycles_1square * PWM_1cycle; // số xung cần truyền cho encoder biết thời điểm dừng khi đủ khoảng cách mong muốn
 float PWM_turn = cycles_turn * PWM_1cycle*1.36; // xung cần truyền cho encoder biết thời điểm rẽ đủ 90 độ
 
-PID::PID (float p, float i, float d)
-    : Kp(p), Ki(i), Kd(d) {}
 //Hàm giới hạn đầu ra
-long long limit (long long currentPwm, const                       long long minPwm, const long long maxPwm){
+long long limit (long long currentPwm, const long long minPwm, const long long maxPwm){
     currentPwm = (currentPwm > maxPwm) ? maxPwm : (currentPwm < minPwm) ? minPwm : currentPwm;
     return currentPwm; 
 }
@@ -141,14 +139,12 @@ void motor_control(float outputLeft , float outputRight, int dirL, int dirR){
             ledcWrite(2, 0);
             ledcWrite(3, outputRight);        
       }
-
-
-
-  Serial.print("Encoder 1 value : "); Serial.println(encoder1Value); 
-  Serial.print("Encoder 2 Value : "); Serial.println(encoder2Value);
 }
-    PID pidLeft(0.141 ,0,0);//0.108
-    PID pidRight(0.125,0,0);//0.105850
+      PID :: PID(float p, float i, float d): 
+      Kp(p), Ki(i), Kd(d) {}
+
+      PID pidLeft(0.141,0,0);//0.108
+      PID pidRight(0.125,0,0);//0.105850
 
 float Motor_controlLeft (long long setpoint, long long encoder1Value, long long dt){
 

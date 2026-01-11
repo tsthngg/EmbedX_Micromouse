@@ -1,4 +1,4 @@
-#include "IMUSENSOR.h"
+#include "imuSensor/IMUSENSOR.h"
 
 MPU6050 mpu(Wire);
 float ax=0, gz=0;

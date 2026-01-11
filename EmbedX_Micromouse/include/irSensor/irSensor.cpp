@@ -1,34 +1,36 @@
-#include "irSensor.h"
+#include "irSensor/irSensor.h"
 #include <Arduino.h>
 
-irSensor::irSensor(int pin) : pin(pin) {
-    pinMode(pin, INPUT);
+bool checkWall(char side) {
+    if (side == 'l') {
+        int pin1 = irLowerLeftPin;
+        int pin2 = irUpperLeftPin;
+    }
+    else if (side == 'r') {
+        int pin1 = irLowerRightPin;
+        int pin2 = irUpperRightPin;
+    }
+    else if (side == 'f') {
+        int pin1 = irFrontLeftPin;
+        int pin2 = irFrontRightPin;
+    }
+    else {
+        return false; // Invalid side
+    }
+    if (digitalread(pin1) == LOW || digitalread(pin2) == LOW) {
+        return true;
+    } 
+    else { 
+        return false;
+    }
 }
 
-int irSensor::checkObs() {  //Kiểm tra chướng ngại vật
-    if (digitalRead(pin) == HIGH) {
-        return 1;
-    }
-    return 0;
+void irSensorSetup() {
+    pinMode(irFrontLeftPin, INPUT);
+    pinMode(irFrontRightPin, INPUT);
+    pinMode(irUpperLeftPin, INPUT);
+    pinMode(irUpperRightPin, INPUT);
+    pinMode(irLowerLeftPin, INPUT);
+    pinMode(irLowerRightPin, INPUT);
 }
 
-int wallFront() {
-    if (irFrontLeft.checkObs() || irFrontRight.checkObs()) {
-        return 1;
-    }
-    return 0;
-}
-
-int wallLeft() {
-    if (irUpperLeft.checkObs() || irLowerLeft.checkObs()) {
-        return 1;
-    }
-    return 0;
-}
-
-int wallRight() {
-    if (irUpperRight.checkObs() || irLowerRight.checkObs()) {
-        return 1;
-    }
-    return 0;
-}

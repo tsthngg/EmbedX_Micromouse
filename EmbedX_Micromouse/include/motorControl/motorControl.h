@@ -43,6 +43,7 @@ long long turnBack();
 void stop ();
 float Motor_controlLeft(long long setpoint, long long encoder1Value, long long dt);
 float Motor_controlRight(long long setpoint, long long encoder2Value, long long dt);
+long long limit (long long currentPwm, const long long minPwm, const long long maxPwm);
 class PID {
 public:
     float Kp, Ki, Kd;
